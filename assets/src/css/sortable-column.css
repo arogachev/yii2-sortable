@@ -1,0 +1,27 @@
+.sortable-cell {
+    min-width: 60px;
+}
+
+.sortable-section {
+    text-align: center;
+}
+
+.sortable-section:not(:first-child) {
+    margin: 5px 0 0 0;
+}
+
+.sortable-section .label:empty {
+    display: inline;
+}
+
+.sortable-section .glyphicon {
+    cursor: pointer;
+}
+
+.sortable-section .glyphicon-sort {
+    cursor: move;
+}
+
+.sortable-section .glyphicon-fast-forward {
+    margin: 0 0 0 5px;
+}
