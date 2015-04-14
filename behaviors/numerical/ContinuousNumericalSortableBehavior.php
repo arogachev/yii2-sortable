@@ -7,11 +7,6 @@ use yii\db\ActiveRecord;
 class ContinuousNumericalSortableBehavior extends BaseNumericalSortableBehavior
 {
     /**
-     * @var \yii\db\ActiveRecord
-     */
-    protected $_oldModel;
-
-    /**
      * @var boolean
      */
     protected $_reindexOldModel = false;
@@ -32,14 +27,8 @@ class ContinuousNumericalSortableBehavior extends BaseNumericalSortableBehavior
     public function events()
     {
         return array_merge(parent::events(), [
-            ActiveRecord::EVENT_AFTER_UPDATE => 'afterUpdate',
             ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
         ]);
-    }
-
-    public function afterFind()
-    {
-        $this->_oldModel = clone $this->model;
     }
 
     public function beforeUpdate()
@@ -56,7 +45,9 @@ class ContinuousNumericalSortableBehavior extends BaseNumericalSortableBehavior
 
     public function afterUpdate()
     {
-        if ($this->_sortableDiff == self::SORTABLE_DIFF_NOT_SORTABLE) {
+        parent::afterUpdate();
+
+        if ($this->getSortableDiff() === false) {
             $this->reindexAfterDelete();
         }
 
@@ -117,7 +108,7 @@ class ContinuousNumericalSortableBehavior extends BaseNumericalSortableBehavior
 
     public function reindexAfterDelete()
     {
-        $sort = $this->getSort();
+        $sort = $this->_oldModel->getSort();
 
         $models = $this->query
             ->andWhere(['>', $this->sortAttribute, $sort])

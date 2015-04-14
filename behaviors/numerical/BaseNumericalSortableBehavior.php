@@ -33,31 +33,43 @@ abstract class BaseNumericalSortableBehavior extends BaseSortableBehavior
     public function events()
     {
         return array_merge(parent::events(), [
+            ActiveRecord::EVENT_INIT => 'modelInit',
             ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
             ActiveRecord::EVENT_BEFORE_INSERT => 'beforeInsert',
+            ActiveRecord::EVENT_AFTER_INSERT => 'afterInsert',
+            ActiveRecord::EVENT_BEFORE_UPDATE => 'beforeUpdate',
+            ActiveRecord::EVENT_AFTER_UPDATE => 'afterUpdate',
         ]);
+    }
+
+    public function modelInit()
+    {
+        $this->_oldModel = clone $this->model;
+    }
+
+    public function afterFind()
+    {
+        $this->_oldModel = clone $this->model;
     }
 
     public function beforeInsert()
     {
-        if (!$this->isSortable()) {
-            $this->resetSort();
+        $this->isSortable() ? $this->addSort() : $this->resetSort();
+    }
 
-            return;
-        }
-
-        $this->addSort();
+    public function afterInsert()
+    {
+        $this->processSortableDiff(true);
     }
 
     public function beforeUpdate()
     {
-        parent::beforeUpdate();
+        $this->processSortableDiff();
+    }
 
-        if ($this->_sortableDiff == self::SORTABLE_DIFF_SORTABLE) {
-            $this->addSort();
-        } elseif ($this->_sortableDiff == self::SORTABLE_DIFF_NOT_SORTABLE) {
-            $this->resetSort();
-        }
+    public function afterUpdate()
+    {
+        $this->processSortableDiff(true);
     }
 
     /**
@@ -176,6 +188,28 @@ abstract class BaseNumericalSortableBehavior extends BaseSortableBehavior
     protected function resetSort()
     {
         $this->setSort(0);
+    }
+
+    protected function updateSort()
+    {
+        $this->model->updateAttributes([$this->sortAttribute => $this->getSort()]);
+    }
+
+    /**
+     * @param boolean $updateSort
+     */
+    protected function processSortableDiff($updateSort = false)
+    {
+        $sortableDiff = $this->getSortableDiff();
+        if ($sortableDiff === true) {
+            $this->addSort();
+        } elseif ($sortableDiff === false) {
+            $this->resetSort();
+        }
+
+        if ($sortableDiff !== null && $updateSort) {
+            $this->updateSort();
+        }
     }
 
     /**

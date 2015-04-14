@@ -33,6 +33,8 @@ class IntervalNumericalSortableBehavior extends BaseNumericalSortableBehavior
 
     public function afterFind()
     {
+        parent::afterFind();
+
         if (!self::$_positionsMap) {
             $this->initPositionsMap();
         }

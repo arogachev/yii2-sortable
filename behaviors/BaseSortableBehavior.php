@@ -13,12 +13,6 @@ use yii\db\ActiveRecord;
  */
 abstract class BaseSortableBehavior extends Behavior
 {
-    const SORTABLE_DIFF_NOT_CHANGED = 0;
-
-    const SORTABLE_DIFF_SORTABLE = 1;
-
-    const SORTABLE_DIFF_NOT_SORTABLE = 2;
-
     /**
      * @var callable
      */
@@ -40,9 +34,9 @@ abstract class BaseSortableBehavior extends Behavior
     public $access;
 
     /**
-     * @var integer
+     * @var \yii\db\ActiveRecord
      */
-    protected $_sortableDiff;
+    protected $_oldModel;
 
 
     /**
@@ -75,22 +69,6 @@ abstract class BaseSortableBehavior extends Behavior
         }
 
         parent::init();
-    }
-
-    /**
-     * @@inheritdoc
-     */
-    public function events()
-    {
-        return [
-            ActiveRecord::EVENT_BEFORE_UPDATE => 'beforeUpdate',
-        ];
-    }
-
-    public function beforeUpdate()
-    {
-        // Fill sortable diff because it is different in afterUpdate()
-        $this->fillSortableDiff();
     }
 
     /**
@@ -144,7 +122,7 @@ abstract class BaseSortableBehavior extends Behavior
             return true;
         }
 
-        $values = $useOldAttributes ? $this->model->oldAttributes : $this->model->attributes;
+        $values = $useOldAttributes ? $this->_oldModel->attributes : $this->model->attributes;
         $sortableValues = array_intersect_key($values, $this->sortableCondition);
 
         foreach ($this->sortableCondition as $name => $value) {
@@ -216,17 +194,20 @@ abstract class BaseSortableBehavior extends Behavior
         return $this->query->all();
     }
 
-    protected function fillSortableDiff()
+    /**
+     * @return null|boolean
+     */
+    protected function getSortableDiff()
     {
         $isSortableBefore = $this->isSortable(true);
         $isSortableAfter = $this->isSortable();
 
         if (!$isSortableBefore && $isSortableAfter) {
-            $this->_sortableDiff = self::SORTABLE_DIFF_SORTABLE;
+            return true;
         } elseif ($isSortableBefore && !$isSortableAfter) {
-            $this->_sortableDiff = self::SORTABLE_DIFF_NOT_SORTABLE;
+            return false;
         } else {
-            $this->_sortableDiff = self::SORTABLE_DIFF_NOT_CHANGED;
+            return null;
         }
     }
 }
