@@ -35,25 +35,22 @@ class ContinuousNumericalSortableBehavior extends BaseNumericalSortableBehavior
     {
         parent::beforeUpdate();
 
-        if ($this->isScopeChanged()) {
-            $this->addSort();
-            $this->_reindexOldModel = true;
-        } else {
-            $this->_reindexOldModel = false;
-        }
+        $this->_reindexOldModel = $this->isScopeChanged() ? true : false;
     }
 
     public function afterUpdate()
     {
         parent::afterUpdate();
 
-        if ($this->getSortableDiff() === false) {
+        if (!$this->getSort()) {
             $this->reindexAfterDelete();
         }
 
         if ($this->_reindexOldModel) {
-            $this->_oldModel->reindexAfterDelete();
+            $this->_oldModel->reindexAfterDelete(true);
         }
+
+        $this->modelInit();
     }
 
     public function afterDelete()
@@ -106,9 +103,12 @@ class ContinuousNumericalSortableBehavior extends BaseNumericalSortableBehavior
         $this->model->updateAttributes([$this->sortAttribute => $position]);
     }
 
-    public function reindexAfterDelete()
+    /**
+     * @param boolean $useCurrentSort
+     */
+    public function reindexAfterDelete($useCurrentSort = false)
     {
-        $sort = $this->_oldModel->getSort();
+        $sort = $useCurrentSort ? $this->model->getSort() : $this->_oldModel->getSort();
 
         $models = $this->query
             ->andWhere(['>', $this->sortAttribute, $sort])

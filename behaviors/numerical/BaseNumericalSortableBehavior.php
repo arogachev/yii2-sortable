@@ -18,6 +18,11 @@ abstract class BaseNumericalSortableBehavior extends BaseSortableBehavior
      */
     protected $_intervalSize;
 
+    /**
+     * @var boolean
+     */
+    protected $_isSortProcessed = false;
+
 
     /**
      * @param integer $position
@@ -45,31 +50,37 @@ abstract class BaseNumericalSortableBehavior extends BaseSortableBehavior
     public function modelInit()
     {
         $this->_oldModel = clone $this->model;
+        $this->_isSortProcessed = false;
     }
 
     public function afterFind()
     {
-        $this->_oldModel = clone $this->model;
+        $this->modelInit();
     }
 
     public function beforeInsert()
     {
-        $this->isSortable() ? $this->addSort() : $this->resetSort();
+        $this->processSort();
     }
 
     public function afterInsert()
     {
-        $this->processSortableDiff(true);
+        $this->processSort(true);
+        $this->modelInit();
     }
 
     public function beforeUpdate()
     {
-        $this->processSortableDiff();
+        $this->processSort();
+
+        if ($this->isScopeChanged()) {
+            $this->addSort();
+        }
     }
 
     public function afterUpdate()
     {
-        $this->processSortableDiff(true);
+        $this->processSort(true);
     }
 
     /**
@@ -198,18 +209,24 @@ abstract class BaseNumericalSortableBehavior extends BaseSortableBehavior
     /**
      * @param boolean $updateSort
      */
-    protected function processSortableDiff($updateSort = false)
+    protected function processSort($updateSort = false)
     {
-        $sortableDiff = $this->getSortableDiff();
-        if ($sortableDiff === true) {
+        if ($this->_isSortProcessed) {
+            return;
+        }
+
+        $isSortable = $this->model->isNewRecord ? $this->isSortable() : $this->getSortableDiff();
+        if ($isSortable === true) {
             $this->addSort();
-        } elseif ($sortableDiff === false) {
+        } elseif ($isSortable === false) {
             $this->resetSort();
         }
 
-        if ($sortableDiff !== null && $updateSort) {
+        if ($isSortable !== null && $updateSort) {
             $this->updateSort();
         }
+
+        $this->_isSortProcessed = true;
     }
 
     /**

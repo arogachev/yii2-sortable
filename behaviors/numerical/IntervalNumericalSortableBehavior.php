@@ -35,9 +35,16 @@ class IntervalNumericalSortableBehavior extends BaseNumericalSortableBehavior
     {
         parent::afterFind();
 
-        if (!self::$_positionsMap) {
-            $this->initPositionsMap();
+        if (!isset(self::$_positionsMap[$this->getPositionMapKey()])) {
+            $this->fillPositionsMap();
         }
+    }
+
+    public function afterUpdate()
+    {
+        parent::afterUpdate();
+
+        $this->modelInit();
     }
 
     /**
@@ -83,6 +90,14 @@ class IntervalNumericalSortableBehavior extends BaseNumericalSortableBehavior
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    protected function getQuery()
+    {
+        return parent::getQuery()->select(null);
+    }
+
+    /**
      * @inheritdoc
      */
     protected function getInitialSortByPosition($position)
@@ -109,7 +124,7 @@ class IntervalNumericalSortableBehavior extends BaseNumericalSortableBehavior
         $this->setSort($sort);
     }
 
-    protected function initPositionsMap()
+    protected function fillPositionsMap()
     {
         $elements = $this->query
             ->select($this->model->primaryKey())

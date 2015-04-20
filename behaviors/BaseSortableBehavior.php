@@ -5,7 +5,6 @@ namespace arogachev\sortable\behaviors;
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidParamException;
-use yii\db\ActiveRecord;
 
 /**
  * @property \yii\db\ActiveRecord $model
