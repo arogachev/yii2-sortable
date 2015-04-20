@@ -9,7 +9,7 @@ class SortableColumnAsset extends AssetBundle
     /**
      * @inheritdoc
      */
-    public $sourcePath = '@vendor/arogachev/yii2-sortable/assets/src';
+    public $sourcePath = '@vendor/arogachev/yii2-sortable/src/assets/src';
 
     /**
      * @inheritdoc
