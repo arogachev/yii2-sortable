@@ -2,6 +2,11 @@
 
 Sortable ActiveRecord for Yii 2 framework
 
+[![Latest Stable Version](https://poser.pugx.org/arogachev/yii2-sortable/v/stable)](https://packagist.org/packages/arogachev/yii2-sortable)
+[![Total Downloads](https://poser.pugx.org/arogachev/yii2-sortable/downloads)](https://packagist.org/packages/arogachev/yii2-sortable)
+[![Latest Unstable Version](https://poser.pugx.org/arogachev/yii2-sortable/v/unstable)](https://packagist.org/packages/arogachev/yii2-sortable)
+[![License](https://poser.pugx.org/arogachev/yii2-sortable/license)](https://packagist.org/packages/arogachev/yii2-sortable)
+
 - [Installation](#installation)
 - [Features](#features)
 - [Behaviors types](#behaviors-types)
