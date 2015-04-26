@@ -202,10 +202,7 @@ class SortableColumn extends Column
 
         $sort = $this->grid->dataProvider->getSort();
 
-        $isDefaultOrderMatches = ($sort->defaultOrder == [$this->_model->sortAttribute => SORT_ASC]);
-        $isOrderMatches = (Yii::$app->request->get($sort->sortParam) == $this->_model->sortAttribute);
-
-        return ($isDefaultOrderMatches || $isOrderMatches);
+        return $sort->orders == [$this->_model->sortAttribute => SORT_ASC];
     }
 
     protected function registerJs()
