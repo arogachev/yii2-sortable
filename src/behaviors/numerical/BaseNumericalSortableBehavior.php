@@ -226,7 +226,9 @@ abstract class BaseNumericalSortableBehavior extends BaseSortableBehavior
             $this->updateSort();
         }
 
-        $this->_isSortProcessed = true;
+        if ($isSortable !== null) {
+            $this->_isSortProcessed = true;
+        }
     }
 
     /**

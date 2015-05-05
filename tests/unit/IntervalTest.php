@@ -63,6 +63,15 @@ class IntervalText extends TestCase
         $question->save();
 
         $this->checkQuestion($question, 6000, [1000, 2000, 4000, 5000]);
+
+        $question->runBeforeSave = true;
+        $question->save();
+
+        $this->checkQuestion($question, 0, [1000, 2000, 4000, 5000]);
+
+        $question->save();
+
+        $this->checkQuestion($question, 6000, [1000, 2000, 4000, 5000]);
     }
 
     public function testDelete()

@@ -63,6 +63,15 @@ class ContinuousTest extends TestCase
         $question->save();
 
         $this->checkQuestion($question, 5, [1, 2, 3, 4]);
+
+        $question->runBeforeSave = true;
+        $question->save();
+
+        $this->checkQuestion($question, 0, [1, 2, 3, 4]);
+
+        $question->save();
+
+        $this->checkQuestion($question, 5, [1, 2, 3, 4]);
     }
 
     public function testDelete()

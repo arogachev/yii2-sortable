@@ -17,6 +17,11 @@ use yii\helpers\ArrayHelper;
 class IntervalQuestion extends ActiveRecord
 {
     /**
+     * @var boolean
+     */
+    public $runBeforeSave = false;
+
+    /**
      * @inheritdoc
      */
     public function behaviors()
@@ -50,6 +55,22 @@ class IntervalQuestion extends ActiveRecord
         return [
             ['is_active', 'default', 'value' => 1],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($this->runBeforeSave) {
+                $this->is_active = !$this->is_active;
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
