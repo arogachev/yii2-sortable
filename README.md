@@ -214,7 +214,7 @@ Then configure `GridView`:
 - Include column in `columns` section
 
 ```php
-use arogachev\grid\SortableColumn;
+use arogachev\sortable\grid\SortableColumn;
 ```
 
 ```php
