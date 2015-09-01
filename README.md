@@ -1,6 +1,7 @@
 # Yii 2 Sortable
 
-Sortable ActiveRecord for Yii 2 framework
+This extension allows to manage order of ActiveRecord models via different behaviors.
+Choose one to fit your needs.
 
 [![Latest Stable Version](https://poser.pugx.org/arogachev/yii2-sortable/v/stable)](https://packagist.org/packages/arogachev/yii2-sortable)
 [![Total Downloads](https://poser.pugx.org/arogachev/yii2-sortable/downloads)](https://packagist.org/packages/arogachev/yii2-sortable)
