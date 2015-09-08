@@ -134,6 +134,26 @@ function () {
 }
 ```
 
+You can use `$model` parameter to generate model related queries:
+
+```php
+function ($model) {
+    return $model->getNeighbors();
+}
+```
+
+where `getNeighbors()` implementation can be like this:
+
+```php
+/**
+ * @return \yii\db\ActiveQuery
+ */
+public function getNeighbors()
+{
+    return static::find()->where(['parent_id' => $this->parent_id]);
+}
+```
+
 If this property is not set, all models considered as one sortable scope.
 
 `sortableCondition` - additional property to filter sortable models. You should specify it as conditional array:
