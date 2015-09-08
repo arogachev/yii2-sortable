@@ -1,5 +1,6 @@
 <?php
 
+use data\Category;
 use data\ContinuousQuestion;
 use yii\codeception\TestCase;
 use yii\helpers\ArrayHelper;
@@ -90,6 +91,17 @@ class ContinuousTest extends TestCase
 
         $this->checkQuestion($question, 6, [1, 2, 3, 4, 5], false);
         $this->checkOtherTestQuestions(1, [1, 2, 3, 4]);
+
+        // Model related scope
+
+        /* @var $category Category */
+        $category = Category::findOne(3);
+        $category->parent_id = 2;
+        $category->save();
+        $category->moveAfter(7);
+        $sort = Category::find()->select('sort')->orderBy(['id' => SORT_ASC])->column();
+
+        $this->assertEquals([1, 1, 3, 2, 2, 1, 2, 4], $sort);
     }
 
     public function testMoveToPosition()

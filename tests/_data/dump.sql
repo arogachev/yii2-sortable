@@ -48,4 +48,20 @@ INSERT INTO "interval_questions" ("id", "test_id", "sort", "content", "is_active
 INSERT INTO "interval_questions" ("id", "test_id", "sort", "content", "is_active") VALUES (9, 2, 4000, 'How good you are as system administrator?', 1);
 INSERT INTO "interval_questions" ("id", "test_id", "sort", "content", "is_active") VALUES (10, 2, 5000, 'Do you have GitHub account?', 1);
 
+CREATE TABLE "categories" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "parent_id" integer,
+  "name" text NOT NULL,
+  "sort" integer NOT NULL
+);
+
+INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (1, NULL, 'Category 1', 1);
+INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (2, 1, 'Category 1.1', 1);
+INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (3, 1, 'Category 1.2', 2);
+INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (4, 1, 'Category 1.3', 3);
+INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (5, NULL, 'Category 2', 2);
+INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (6, 2, 'Category 2.1', 1);
+INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (7, 2, 'Category 2.2', 2);
+INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (8, 2, 'Category 2.3', 3);
+
 COMMIT;

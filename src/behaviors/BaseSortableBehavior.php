@@ -54,23 +54,6 @@ abstract class BaseSortableBehavior extends Behavior
     abstract public function moveAfter($pk);
 
     /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        if ($this->scope) {
-            /* @var $scopeQuery \yii\db\ActiveQuery */
-            $scopeQuery = call_user_func($this->scope);
-
-            if (!is_array($scopeQuery->where)) {
-                throw new InvalidConfigException('"where" part of $scope query must be specified as array.');
-            }
-        }
-
-        parent::init();
-    }
-
-    /**
      * @param $position
      * @return boolean
      * @throws InvalidParamException
@@ -151,6 +134,7 @@ abstract class BaseSortableBehavior extends Behavior
 
     /**
      * @return array
+     * @throws InvalidConfigException
      */
     public function getSortableScopeCondition()
     {
@@ -159,7 +143,11 @@ abstract class BaseSortableBehavior extends Behavior
         }
 
         /* @var $scopeQuery \yii\db\ActiveQuery */
-        $scopeQuery = call_user_func($this->scope);
+        $scopeQuery = call_user_func($this->scope, $this->model);
+
+        if (!is_array($scopeQuery->where)) {
+            throw new InvalidConfigException('"where" part of $scope query must be specified as array.');
+        }
 
         return $scopeQuery->where;
     }
