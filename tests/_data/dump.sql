@@ -63,5 +63,6 @@ INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (5, NULL, 'C
 INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (6, 2, 'Category 2.1', 1);
 INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (7, 2, 'Category 2.2', 2);
 INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (8, 2, 'Category 2.3', 3);
+INSERT INTO "categories" ("id", "parent_id", "name", "sort") VALUES (9, 8, 'Category 2.3.1', 1);
 
 COMMIT;

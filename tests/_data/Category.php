@@ -19,7 +19,7 @@ class Category extends ActiveRecord
     public function behaviors()
     {
         return [
-            [
+            'sort' => [
                 'class' => ContinuousNumericalSortableBehavior::className(),
                 'scope' => function ($model) {
                     /* @var $model Category */
@@ -35,6 +35,16 @@ class Category extends ActiveRecord
     public static function tableName()
     {
         return 'categories';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            ['name', 'string', 'max' => 255],
+        ];
     }
 
     /**

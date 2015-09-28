@@ -271,7 +271,7 @@ abstract class BaseNumericalSortableBehavior extends BaseSortableBehavior
         foreach ($models as $model) {
             $isCurrentModel = $model->primaryKey == $this->model->primaryKey;
 
-            if ($position == $newPosition && $position != $this->getSortableCount()) {
+            if ($position == $newPosition) {
                 $position++;
             }
 

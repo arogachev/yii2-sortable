@@ -50,6 +50,21 @@ class ContinuousTest extends TestCase
         $question->save();
 
         $this->checkQuestion($question, 1, [2, 3, 4, 5, 6]);
+
+        // Prepend to scope with single model
+        $category = new Category();
+        $behaviorConfig = $category->behaviors()['sort'];
+        $behaviorConfig['prependAdded'] = true;
+        $category->detachBehavior('sort');
+        $category->attachBehavior('sort', $behaviorConfig);
+        $category->setAttributes([
+            'parent_id' => 8,
+            'name' => 'Category 2.3.2',
+        ], false);
+        $category->save();
+        $sort = Category::find()->select('sort')->orderBy(['id' => SORT_ASC])->column();
+
+        $this->assertEquals([1, 1, 2, 3, 2, 1, 2, 3, 2, 1], $sort);
     }
 
     public function testUpdate()
@@ -101,7 +116,7 @@ class ContinuousTest extends TestCase
         $category->moveAfter(7);
         $sort = Category::find()->select('sort')->orderBy(['id' => SORT_ASC])->column();
 
-        $this->assertEquals([1, 1, 3, 2, 2, 1, 2, 4], $sort);
+        $this->assertEquals([1, 1, 3, 2, 2, 1, 2, 4, 1], $sort);
     }
 
     public function testMoveToPosition()
