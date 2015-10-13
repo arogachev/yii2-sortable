@@ -193,8 +193,9 @@ class SortableColumn extends Column
                 }
             }
 
-            foreach ($formData as $attribute => $value) {
-                if ($value && !in_array($attribute, $sortableAttributes)) {
+            foreach ($sortableAttributes as $attribute => $value) {
+                $formValue = ArrayHelper::getValue($formData, $attribute);
+                if ($formValue && $formValue != $value) {
                     return false;
                 }
             }
