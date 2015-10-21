@@ -135,9 +135,6 @@ class ContinuousNumericalSortableBehavior extends BaseNumericalSortableBehavior
     protected function prependAdded()
     {
         $this->resolveConflict(1, false);
-
-        if ($this->model->isNewRecord) {
-            $this->setSort($this->getInitialSortByPosition(1));
-        }
+        $this->setSort($this->getInitialSortByPosition(1));
     }
 }

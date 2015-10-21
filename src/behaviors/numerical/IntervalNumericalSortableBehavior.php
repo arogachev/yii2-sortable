@@ -113,10 +113,7 @@ class IntervalNumericalSortableBehavior extends BaseNumericalSortableBehavior
         $sort = $this->getSortByInterval([0, $this->getFirstSort()]);
         if (!$sort) {
             $this->resolveConflict(1, false);
-
-            if ($this->model->isNewRecord) {
-                $this->setSort($this->getInitialSortByPosition(1));
-            }
+            $this->setSort($this->getInitialSortByPosition(1));
 
             return;
         }
