@@ -39,6 +39,16 @@ class SortableColumn extends Column
 
 
     /**
+     * @var bool
+     */
+    public $needConfirmationOnMove = true;
+
+    /**
+     * @var string
+     */
+    public $baseUrl = '/sort/';
+
+    /**
      * @inheritdoc
      */
     public function init()
@@ -219,6 +229,8 @@ class SortableColumn extends Column
                 'handle' => '.glyphicon-sort',
                 'modelClass' => $model::className(),
                 'modelsCount' => $this->grid->dataProvider->getTotalCount(),
+                'baseUrl' => $this->baseUrl,
+                'needConfirmationOnMove' => $this->needConfirmationOnMove,
                 'moveConfirmationText' => Yii::t('sortable', 'Are you sure you want to move this item?'),
             ],
             'clientEvents' => [

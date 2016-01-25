@@ -20,43 +20,44 @@
     }
 
     $.extend(Row.prototype, {
-        getGridView: function() {
+
+        getGridView: function () {
             return this.$el.closest('.grid-view');
         },
 
-        getSortable: function() {
+        getSortable: function () {
             return this.$el.closest('.ui-sortable');
         },
 
-        getSortableCell: function() {
+        getSortableCell: function () {
             return this.$el.find('.sortable-cell');
         },
 
-        getPositionEl: function() {
+        getPositionEl: function () {
             return this.getSortableCell().find('.label');
         },
 
-        getPosition: function() {
+        getPosition: function () {
             return this.getSortableCell().data('position');
         },
 
-        isSortable: function() {
+        isSortable: function () {
             return this.getPosition() != 0;
         },
 
-        getCount: function() {
+        getCount: function () {
             return this.getSortable().sortable('option', 'modelsCount');
         },
 
-        isFirst: function() {
+        isFirst: function () {
             return this.getPosition() == 1;
         },
 
-        isLast: function() {
+        isLast: function () {
             return this.getPosition() == this.getCount();
         },
 
-        isPositionValid: function(position) {
+        isPositionValid: function (position) {
             position = parseInt(position);
 
             if (isNaN(position)) {
@@ -66,34 +67,43 @@
             return (position >= 1 && position <= this.getCount());
         },
 
-        resetPosition: function() {
+        resetPosition: function () {
             this.getPositionEl().text(this.getPosition());
         },
 
-        getClass: function() {
+        getClass: function () {
             return this.getSortable().sortable('option', 'modelClass');
         },
 
-        getPk: function() {
+        getPk: function () {
             return this.$el.data('key');
         },
 
-        getMoveConfirmationText: function() {
+        getMoveConfirmationText: function () {
             return this.getSortable().sortable('option', 'moveConfirmationText');
         },
 
-        move: function(action, additionalParams) {
+        getBaseUrl: function() {
+            return this.getSortable().sortable('option', 'baseUrl');
+        },
+
+        needConfirmationOnMove: function () {
+            return this.getSortable().sortable('option', 'needConfirmationOnMove');
+        },
+        move: function (action, additionalParams) {
             var row = this;
 
             if (!this.isSortable()) {
                 return;
             }
 
-            if (!confirm(this.getMoveConfirmationText())) {
-                this.resetPosition();
-                this.getSortable().sortable('cancel');
+            if (this.needConfirmationOnMove === true) {
+                if (!confirm(this.getMoveConfirmationText())) {
+                    this.resetPosition();
+                    this.getSortable().sortable('cancel');
 
-                return;
+                    return;
+                }
             }
 
             this.getPositionEl().removeClass('label-info').addClass('label-warning');
@@ -105,7 +115,7 @@
             var allParams = !additionalParams ? params : $.extend({}, params, additionalParams);
 
             $.post(
-                '/sort/' + action,
+                this.getBaseUrl() + action,
                 allParams,
                 function () {
                     row.getPositionEl().removeClass('label-warning').addClass('label-success');
@@ -116,7 +126,7 @@
     });
 
     var methods = {
-        moveToPosition: function(position) {
+        moveToPosition: function (position) {
             if (!this.isPositionValid(position)) {
                 this.resetPosition();
 
@@ -124,16 +134,16 @@
             }
 
             if (position != this.getPosition()) {
-                this.move('move-to-position', { position: position });
+                this.move('move-to-position', {position: position});
             }
         },
 
-        moveWithDragAndDrop: function() {
+        moveWithDragAndDrop: function () {
             var $prevRow = this.$el.prev();
             if ($prevRow.length) {
                 var prevRow = new Row($prevRow);
                 if (prevRow.isSortable()) {
-                    this.move('move-after', { pk: prevRow.getPk() });
+                    this.move('move-after', {pk: prevRow.getPk()});
 
                     return;
                 }
@@ -143,7 +153,7 @@
             if ($nextRow.length) {
                 var nextRow = new Row($nextRow);
                 if (nextRow.isSortable()) {
-                    this.move('move-before', { pk: nextRow.getPk() });
+                    this.move('move-before', {pk: nextRow.getPk()});
                     return;
                 }
             }
@@ -151,25 +161,25 @@
             this.getSortable().sortable('cancel');
         },
 
-        moveForward: function() {
+        moveForward: function () {
             if (!this.isFirst()) {
-                this.move('move-to-position', { position: this.getPosition() - 1 });
+                this.move('move-to-position', {position: this.getPosition() - 1});
             }
         },
 
-        moveBack: function() {
+        moveBack: function () {
             if (!this.isLast()) {
-                this.move('move-to-position', { position: this.getPosition() + 1 });
+                this.move('move-to-position', {position: this.getPosition() + 1});
             }
         },
 
-        moveAsFirst: function() {
+        moveAsFirst: function () {
             if (!this.isFirst()) {
                 this.move('move-as-first');
             }
         },
 
-        moveAsLast: function() {
+        moveAsLast: function () {
             if (!this.isLast()) {
                 this.move('move-as-last');
             }
