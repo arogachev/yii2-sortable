@@ -87,9 +87,10 @@
             return this.getSortable().sortable('option', 'baseUrl');
         },
 
-        needConfirmationOnMove: function () {
-            return this.getSortable().sortable('option', 'needConfirmationOnMove');
+        isMoveConfirmed: function () {
+            return this.getSortable().sortable('option', 'confirmMove');
         },
+
         move: function (action, additionalParams) {
             var row = this;
 
@@ -97,13 +98,12 @@
                 return;
             }
 
-            if (this.needConfirmationOnMove === true) {
-                if (!confirm(this.getMoveConfirmationText())) {
-                    this.resetPosition();
-                    this.getSortable().sortable('cancel');
+            if (this.isMoveConfirmed() === true && !confirm(this.getMoveConfirmationText())) {
+                this.resetPosition();
+                this.getSortable().sortable('cancel');
 
-                    return;
-                }
+                return;
+
             }
 
             this.getPositionEl().removeClass('label-info').addClass('label-warning');

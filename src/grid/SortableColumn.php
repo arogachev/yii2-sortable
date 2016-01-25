@@ -37,11 +37,10 @@ class SortableColumn extends Column
      */
     protected $_model;
 
-
     /**
      * @var bool
      */
-    public $needConfirmationOnMove = true;
+    public $confirmMove = true;
 
     /**
      * @var string
@@ -230,7 +229,7 @@ class SortableColumn extends Column
                 'modelClass' => $model::className(),
                 'modelsCount' => $this->grid->dataProvider->getTotalCount(),
                 'baseUrl' => $this->baseUrl,
-                'needConfirmationOnMove' => $this->needConfirmationOnMove,
+                'confirmMove' => $this->confirmMove,
                 'moveConfirmationText' => Yii::t('sortable', 'Are you sure you want to move this item?'),
             ],
             'clientEvents' => [
