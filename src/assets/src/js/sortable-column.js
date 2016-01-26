@@ -78,6 +78,14 @@
             return this.$el.data('key');
         },
 
+        getBaseUrl: function() {
+            return this.getSortable().sortable('option', 'baseUrl');
+        },
+
+        isMoveConfirmed: function() {
+            return this.getSortable().sortable('option', 'confirmMove');
+        },
+
         getMoveConfirmationText: function() {
             return this.getSortable().sortable('option', 'moveConfirmationText');
         },
@@ -89,11 +97,12 @@
                 return;
             }
 
-            if (!confirm(this.getMoveConfirmationText())) {
+            if (this.isMoveConfirmed() === true && !confirm(this.getMoveConfirmationText())) {
                 this.resetPosition();
                 this.getSortable().sortable('cancel');
 
                 return;
+
             }
 
             this.getPositionEl().removeClass('label-info').addClass('label-warning');
@@ -105,7 +114,7 @@
             var allParams = !additionalParams ? params : $.extend({}, params, additionalParams);
 
             $.post(
-                '/sort/' + action,
+                this.getBaseUrl() + action,
                 allParams,
                 function () {
                     row.getPositionEl().removeClass('label-warning').addClass('label-success');
