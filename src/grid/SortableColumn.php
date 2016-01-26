@@ -33,6 +33,15 @@ class SortableColumn extends Column
     public $gridContainerId;
 
     /**
+     * @var bool
+     */
+    public $confirmMove = true;
+    /**
+     * @var string
+     */
+    public $baseUrl = '/sort/';
+
+    /**
      * @var ActiveRecord|BaseNumericalSortableBehavior
      */
     protected $_model;
@@ -219,6 +228,8 @@ class SortableColumn extends Column
                 'handle' => '.glyphicon-sort',
                 'modelClass' => $model::className(),
                 'modelsCount' => $this->grid->dataProvider->getTotalCount(),
+                'baseUrl' => $this->baseUrl,
+                'confirmMove' => $this->confirmMove,
                 'moveConfirmationText' => Yii::t('sortable', 'Are you sure you want to move this item?'),
             ],
             'clientEvents' => [
