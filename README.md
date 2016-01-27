@@ -248,6 +248,8 @@ use arogachev\sortable\grid\SortableColumn;
             [
                 'class' => SortableColumn::className(),
                 'gridContainerId' => 'question-sortable',
+                'baseUrl' => '/sort/', // Optional, defaults to '/sort/'
+                'confirmMove' => true, // Optional, defaults to true
             ],
             // Other columns
         ],
