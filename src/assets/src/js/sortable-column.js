@@ -97,12 +97,11 @@
                 return;
             }
 
-            if (this.isMoveConfirmed() === true && !confirm(this.getMoveConfirmationText())) {
+            if (this.isMoveConfirmed() && !confirm(this.getMoveConfirmationText())) {
                 this.resetPosition();
                 this.getSortable().sortable('cancel');
 
                 return;
-
             }
 
             this.getPositionEl().removeClass('label-info').addClass('label-warning');

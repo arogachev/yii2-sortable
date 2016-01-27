@@ -33,7 +33,7 @@ class SortableColumn extends Column
     public $gridContainerId;
 
     /**
-     * @var bool
+     * @var boolean
      */
     public $confirmMove = true;
     /**
